@@ -4,16 +4,16 @@ require_once 'includes/functions.php';
 
 cekLogin();
 
-// Ambil data kategori
+// Ambil data pemasok
 try {
-    $stmt = $pdo->query("SELECT * FROM kategori_barang ORDER BY tanggal_dibuat DESC");
-    $kategori = $stmt->fetchAll();
+    $stmt = $pdo->query("SELECT * FROM pemasok ORDER BY created_at DESC");
+    $pemasok = $stmt->fetchAll();
 } catch (PDOException $e) {
-    $kategori = [];
+    $pemasok = [];
 }
 ?>
 <?php 
-$pageTitle = 'Kategori Barang';
+$pageTitle = 'Data Pemasok';
 require_once 'includes/header.php'; 
 ?>
 
@@ -24,13 +24,13 @@ require_once 'includes/header.php';
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                                <h6 class="text-white text-capitalize ps-3">Kategori Barang</h6>
+                                <h6 class="text-white text-capitalize ps-3">Data Pemasok</h6>
                             </div>
                         </div>
                         <div class="card-body px-0 pb-2">
                             <div class="px-3 mb-3">
-                                <button class="btn bg-gradient-primary" onclick="tambahKategori()">
-                                    <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Kategori
+                                <button class="btn bg-gradient-primary" onclick="tambahPemasok()">
+                                    <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Pemasok
                                 </button>
                             </div>
                             <div class="table-responsive p-0">
@@ -38,15 +38,15 @@ require_once 'includes/header.php';
                                     <thead>
                                         <tr>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No.</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Kategori</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Deskripsi</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Dibuat</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Pemasok</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alamat</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Telepon</th>
                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php $i = 1; ?>
-                                        <?php foreach ($kategori as $row): ?>
+                                        <?php foreach ($pemasok as $row): ?>
                                         <tr>
                                             <td>
                                                 <div class="d-flex px-2 py-1">
@@ -56,19 +56,19 @@ require_once 'includes/header.php';
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($row['nama_kategori']); ?></p>
+                                                <p class="text-xs font-weight-bold mb-0"><?php echo htmlspecialchars($row['nama_pemasok']); ?></p>
                                             </td>
                                             <td>
-                                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($row['deskripsi_kategori']); ?></p>
+                                                <p class="text-xs text-secondary mb-0"><?php echo htmlspecialchars($row['alamat']); ?></p>
                                             </td>
                                             <td>
-                                                <span class="text-secondary text-xs font-weight-bold"><?php echo date('d/m/Y H:i', strtotime($row['tanggal_dibuat'])); ?></span>
+                                                <span class="text-secondary text-xs font-weight-bold"><?php echo htmlspecialchars($row['telepon']); ?></span>
                                             </td>
                                             <td class="align-middle">
-                                                <button class="btn btn-sm bg-gradient-info me-1" onclick="editKategori(<?php echo $row['id_kategori']; ?>)">
+                                                <button class="btn btn-sm bg-gradient-info me-1" onclick="editPemasok(<?php echo $row['id_pemasok']; ?>)">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
-                                                <button class="btn btn-sm bg-gradient-danger" onclick="hapusKategori(<?php echo $row['id_kategori']; ?>)">
+                                                <button class="btn btn-sm bg-gradient-danger" onclick="hapusPemasok(<?php echo $row['id_pemasok']; ?>)">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </td>
@@ -98,26 +98,30 @@ require_once 'includes/header.php';
         </footer>
     </main>
 
-    <!-- Modal Kategori -->
-    <div class="modal fade" id="modalKategori" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Modal Pemasok -->
+    <div class="modal fade" id="modalPemasok" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <form id="formKategori">
+                <form id="formPemasok">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalKategoriTitle">Tambah Kategori</h5>
+                        <h5 class="modal-title" id="modalPemasokTitle">Tambah Pemasok</h5>
                         <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="kategori_id" name="id_kategori">
+                        <input type="hidden" id="pemasok_id" name="id_pemasok">
                         <div class="input-group input-group-outline mb-3">
-                            <label class="form-label">Nama Kategori</label>
-                            <input type="text" id="nama_kategori" name="nama_kategori" class="form-control" required>
+                            <label class="form-label">Nama Pemasok</label>
+                            <input type="text" id="nama_pemasok" name="nama_pemasok" class="form-control" required>
                         </div>
                         <div class="input-group input-group-outline mb-3">
-                            <label class="form-label">Deskripsi Kategori</label>
-                            <textarea id="deskripsi_kategori" name="deskripsi_kategori" class="form-control" rows="3"></textarea>
+                            <label class="form-label">Alamat</label>
+                            <textarea id="alamat" name="alamat" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="input-group input-group-outline mb-3">
+                            <label class="form-label">Telepon</label>
+                            <input type="text" id="telepon" name="telepon" class="form-control">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -133,7 +137,8 @@ require_once 'includes/header.php';
     <script src="material-dashboard-master/assets/js/core/popper.min.js"></script>
     <script src="material-dashboard-master/assets/js/core/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="material-dashboard-master/assets/js/material-dashboard.min.js?v=3.0.0"></script>
-    <script src="assets/js/kategori.js"></script>
+    <script src="assets/js/pemasok.js"></script>
 </body>
 </html>

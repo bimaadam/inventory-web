@@ -136,5 +136,5 @@ function resetFormLabels() {
 
 // Fungsi untuk set form labels active
 function setFormLabelsActive() {
-    $('#formKategori .input-group').addClass('is-focused is-filled');
+    $('#formKategori .input-group').addClass('is-filled');
 }

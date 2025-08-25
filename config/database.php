@@ -1,6 +1,6 @@
 <?php
 // Konfigurasi Database
-$host = 'localhost';
+$host = '127.0.0.1';
 $username = 'root';
 $password = '';
 $database = 'zoya_cookies_db';

@@ -86,5 +86,32 @@
         });
     });
     </script>
+    <script>
+    // Script to handle floating labels for Material Dashboard
+    $(document).ready(function() {
+        function checkAndFill() {
+            $('.input-group.input-group-outline input').each(function() {
+                if ($(this).val().trim() !== '') {
+                    $(this).parent().addClass('is-filled');
+                } else {
+                    $(this).parent().removeClass('is-filled');
+                }
+            });
+        }
+
+        // Check on page load (with a slight delay for autofill)
+        setTimeout(checkAndFill, 100); // Give browser time to autofill
+
+        // Check on focus, keyup, and blur
+        $('.input-group.input-group-outline input').on('focus keyup blur', function() {
+            checkAndFill();
+        });
+
+        // Also check when the form is submitted (in case of validation errors)
+        $('#loginForm').on('submit', function() {
+            checkAndFill();
+        });
+    });
+    </script>
 </body>
 </html>
